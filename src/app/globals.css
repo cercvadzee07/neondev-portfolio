@@ -9,7 +9,7 @@
   --color-fg: #c0caf5;
   --color-fg-strong: #e3e8ff;
   --color-fg-muted: #7a83a8;
-  --color-fg-subtle: #565f89;
+  --color-fg-subtle: #737ca6; /* 4.5:1+ on the dark backgrounds */
   --color-cyan-neon: #7dcfff;
   --color-violet-neon: #bb9af7;
   --color-indigo-neon: #a9b1ff;

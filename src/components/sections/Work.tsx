@@ -51,10 +51,10 @@ export default function Work() {
                     ))}
                   </div>
                   <div className="mt-auto flex gap-3 pt-6">
-                    <a href={p.live} target="_blank" rel="noopener noreferrer" className="btn-primary flex-1 px-4 py-2 text-sm">
+                    <a href={p.live} target="_blank" rel="noopener noreferrer" aria-label={`Live demo of ${p.title} (opens in a new tab)`} className="btn-primary flex-1 px-4 py-2 text-sm">
                       Live demo ↗
                     </a>
-                    <Link href={`/projects/${p.slug}`} className="btn-ghost flex-1 px-4 py-2 text-sm">
+                    <Link href={`/projects/${p.slug}`} aria-label={`${p.title} case study`} className="btn-ghost flex-1 px-4 py-2 text-sm">
                       Case study
                     </Link>
                   </div>

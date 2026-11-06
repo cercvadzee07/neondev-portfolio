@@ -46,7 +46,9 @@ export default function DecryptText({ text, className, speed = 28, as: Tag = "sp
 
   let i = 0;
   return (
-    <Tag ref={ref as never} className={className} aria-label={text}>
+    <Tag ref={ref as never} className={className}>
+      {/* screen readers get the real text; the animated copy is hidden from them */}
+      <span className="sr-only">{text}</span>
       <span aria-hidden>
         {glyphs === null
           ? text

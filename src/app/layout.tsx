@@ -11,6 +11,9 @@ import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { site } from "@/content/site";
 
+// social previews cut off around 125 characters
+const shareDescription = "Fast, polished, production-ready web apps, often in days, not weeks. Next.js, React, TypeScript, Tailwind.";
+
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: "--font-inter-var", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "700"], variable: "--font-jb-var", display: "swap" });
 
@@ -25,10 +28,10 @@ export const metadata: Metadata = {
     url: site.url,
     siteName: site.name,
     title: `${site.name} — Building Production-Ready Web Apps & MVPs`,
-    description: site.description,
+    description: shareDescription,
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "NEONDEV — Building Production-Ready Web Apps & MVPs" }],
   },
-  twitter: { card: "summary_large_image", title: `${site.name} — ${site.role}`, description: site.description, images: ["/og.png"] },
+  twitter: { card: "summary_large_image", title: `${site.name} — ${site.role}`, description: shareDescription, images: ["/og.png"] },
   icons: { icon: "/icon.svg", apple: "/apple-icon.png" },
 };
 
