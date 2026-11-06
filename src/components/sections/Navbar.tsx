@@ -20,7 +20,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "border-b border-cyan-neon/10 bg-ink-950/70 backdrop-blur-xl" : "bg-transparent"
+        scrolled ? "border-b border-cyan-neon/10 bg-ink-950/92" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6" aria-label="Main">
@@ -69,7 +69,7 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div id="mobile-menu" className="border-t border-cyan-neon/10 bg-ink-950/95 px-4 pb-6 pt-2 backdrop-blur-xl md:hidden">
+        <div id="mobile-menu" className="border-t border-cyan-neon/10 bg-ink-950/98 px-4 pb-6 pt-2 md:hidden">
           {nav.map((n) => (
             <a key={n.href} href={`/${n.href}`} onClick={() => setOpen(false)} className="block py-3 text-lg text-fg-strong">
               {n.label}

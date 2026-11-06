@@ -25,15 +25,13 @@
 
   --animate-marquee: marquee 40s linear infinite;
   --animate-blink: blink 2.4s ease-in-out infinite;
-  --animate-breathe: breathe 5s ease-in-out infinite;
+  --animate-breathe: pulse-glow 5s ease-in-out infinite;
   --animate-shift: shift 8s ease-in-out infinite;
 
   @keyframes marquee { to { transform: translateX(-50%); } }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-  @keyframes breathe {
-    0%, 100% { box-shadow: 0 0 30px rgba(125, 207, 255, 0.3), 0 0 80px rgba(187, 154, 247, 0.25); }
-    50% { box-shadow: 0 0 50px rgba(125, 207, 255, 0.5), 0 0 140px rgba(187, 154, 247, 0.42); }
-  }
+  /* opacity-only pulse: runs on the GPU, no repaint (animating box-shadow repaints every frame) */
+  @keyframes pulse-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
   @keyframes shift { 50% { background-position: 100% 100%; } }
 }
 
@@ -72,12 +70,12 @@ body { @apply text-fg font-sans antialiased; overflow-x: hidden; }
   .section { @apply relative mx-auto w-full max-w-6xl px-4 py-24 sm:px-6 md:py-32; }
   .eyebrow { @apply font-mono text-xs uppercase tracking-[0.35em] text-fg-muted; }
   .h2 { @apply mt-3 text-3xl font-extrabold tracking-tight text-fg-strong sm:text-5xl; }
-  .panel { @apply rounded-2xl border border-cyan-neon/15 bg-ink-850/70 backdrop-blur-md; }
+  .panel { @apply rounded-2xl border border-cyan-neon/15 bg-ink-850/90; }
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-xl bg-neon px-6 py-3 font-bold text-ink-950 shadow-glow transition-[filter,box-shadow] hover:brightness-110 hover:shadow-glow-lg;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-neon/25 bg-ink-850/60 px-6 py-3 font-semibold text-fg-strong backdrop-blur transition-colors hover:border-cyan-neon/60;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-neon/25 bg-ink-850/85 px-6 py-3 font-semibold text-fg-strong transition-colors hover:border-cyan-neon/60;
   }
   .card3d { @apply rounded-2xl border border-cyan-neon/15 bg-ink-850/85; }
   .chip { @apply rounded-full border border-cyan-neon/15 bg-ink-850/70 px-3 py-1 font-mono text-xs text-fg; }

@@ -69,7 +69,7 @@ export default function CommandPalette() {
   };
 
   return (
-    <div className="fixed inset-0 z-[90] flex items-start justify-center bg-ink-950/70 px-4 pt-[15vh] backdrop-blur-sm" onClick={closePalette}>
+    <div className="fixed inset-0 z-[90] flex items-start justify-center bg-ink-950/85 px-4 pt-[15vh]" onClick={closePalette}>
       <div
         role="dialog"
         aria-modal="true"

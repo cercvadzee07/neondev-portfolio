@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
 
 /** Live local time in Tbilisi, e.g. "18:40:12". */
@@ -19,21 +19,22 @@ export function LiveClock({ className }: { className?: string }) {
   );
 }
 
-/** Thin gradient bar at the top showing scroll progress. */
+/** Thin gradient bar at the top showing scroll progress (updates the DOM directly, no React re-renders). */
 export function ScrollProgress() {
-  const [p, setP] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const onScroll = () => {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      setP(max > 0 ? window.scrollY / max : 0);
+      if (ref.current) ref.current.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
     };
-    onScroll();
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", onScroll); };
   }, []);
-  return (
-    <div aria-hidden className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-neon" style={{ transform: `scaleX(${p})` }} />
-  );
+  return <div ref={ref} aria-hidden className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-neon will-change-transform" style={{ transform: "scaleX(0)" }} />;
 }
 
 /** Infinite tech-stack ticker. */

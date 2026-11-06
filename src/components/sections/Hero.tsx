@@ -15,7 +15,7 @@ export default function Hero() {
           </p>
           <h1 className="mt-6 text-5xl font-black leading-[1.02] tracking-tight text-fg-strong sm:text-6xl lg:text-[4.25rem]">
             Building Production‑Ready{" "}
-            <DecryptText text="Web Apps & MVPs" className="text-neon animate-shift" />
+            <DecryptText text="Web Apps & MVPs" className="text-neon" />
           </h1>
           <p className="mt-6 max-w-xl text-lg text-fg-muted">{site.description}</p>
           <div className="mt-9 flex flex-wrap items-center gap-4">
