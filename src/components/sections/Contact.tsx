@@ -5,6 +5,7 @@ import DecryptText from "@/components/effects/DecryptText";
 import Magnetic from "@/components/effects/Magnetic";
 import { LiveClock } from "@/components/effects/Misc";
 import { site } from "@/content/site";
+import { FaEnvelope, FaGithub, FaLinkedinIn, FaUpwork } from "react-icons/fa6";
 
 type Status = "idle" | "sending" | "sent" | "mailto" | "error";
 const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_ID;
@@ -66,20 +67,20 @@ export default function Contact() {
           </p>
           <div className="mt-8 space-y-3">
             {[
-              { label: "Hire me on Upwork", href: site.links.upwork },
-              { label: "GitHub", href: site.links.github },
-              { label: "LinkedIn", href: site.links.linkedin },
-              { label: site.links.email, href: `mailto:${site.links.email}` },
+              { label: "Hire me on Upwork", href: site.links.upwork, Icon: FaUpwork },
+              { label: "GitHub", href: site.links.github, Icon: FaGithub },
+              { label: "LinkedIn", href: site.links.linkedin, Icon: FaLinkedinIn },
+              { label: site.links.email, href: `mailto:${site.links.email}`, Icon: FaEnvelope },
             ].map((l) => (
               <a
                 key={l.label}
                 href={l.href}
                 target={l.href.startsWith("mailto") ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                className="card3d spotlight flex items-center justify-between px-5 py-4 text-sm font-semibold text-fg-strong transition-colors hover:text-cyan-neon"
+                className="card3d spotlight flex items-center justify-between gap-4 px-5 py-4 text-sm font-semibold text-fg-strong transition-colors hover:text-cyan-neon"
               >
-                {l.label}
-                <span className="text-cyan-neon">↗</span>
+                <span className="min-w-0 truncate">{l.label}</span>
+                <l.Icon aria-hidden className="h-5 w-5 shrink-0 text-cyan-neon" />
               </a>
             ))}
           </div>

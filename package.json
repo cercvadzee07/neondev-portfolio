@@ -2,7 +2,7 @@
   "name": "neondev-portfolio",
   "version": "1.0.0",
   "private": true,
-  "description": "NEONDEV \u2014 portfolio of Beqa Tsertsvadze, Full-Stack & Rapid MVP Developer.",
+  "description": "NEONDEV — portfolio of Beqa Tsertsvadze, Full-Stack & Rapid MVP Developer.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -14,6 +14,7 @@
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-icons": "^5.4.0",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
