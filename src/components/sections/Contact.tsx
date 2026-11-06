@@ -6,7 +6,7 @@ import Magnetic from "@/components/effects/Magnetic";
 import { LiveClock } from "@/components/effects/Misc";
 import { site } from "@/content/site";
 
-type Status = "idle" | "sending" | "sent" | "error";
+type Status = "idle" | "sending" | "sent" | "mailto" | "error";
 const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_ID;
 
 const field =
@@ -23,6 +23,7 @@ export default function Contact() {
     const name = String(data.get("name") || "").trim();
     const email = String(data.get("email") || "").trim();
     const message = String(data.get("message") || "").trim();
+    if (String(data.get("_gotcha") || "")) return; // bot
     if (!name || !/^\S+@\S+\.\S+$/.test(email) || message.length < 10) {
       setError("Please add your name, a valid email and a short message (10+ characters).");
       setStatus("error");
@@ -34,7 +35,7 @@ export default function Contact() {
     if (!FORMSPREE_ID) {
       const body = `Name: ${name}\nEmail: ${email}\nProject: ${data.get("type")}\nBudget: ${data.get("budget")}\n\n${message}`;
       window.location.href = `mailto:${site.links.email}?subject=${encodeURIComponent("New project inquiry — " + name)}&body=${encodeURIComponent(body)}`;
-      setStatus("sent");
+      setStatus("mailto");
       return;
     }
 
@@ -89,6 +90,8 @@ export default function Contact() {
 
         <Reveal delay={150}>
           <form onSubmit={onSubmit} noValidate className="panel space-y-4 p-6 sm:p-8">
+            {/* honeypot: hidden from people, bots fill it and Formspree drops the submission */}
+            <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block">
                 <span className="mb-1.5 block text-xs font-semibold text-fg-muted">Name</span>
@@ -124,6 +127,12 @@ export default function Contact() {
               <textarea name="message" rows={5} className={field} placeholder="What are you building? Any links or deadlines?" />
             </label>
             {status === "error" && <p role="alert" className="text-sm text-bad">{error}</p>}
+            {status === "mailto" && (
+              <p role="status" className="text-sm text-warn">
+                Your email app should open with the message ready — press <strong>Send</strong> there. If nothing opened, email me
+                directly at <a className="text-cyan-neon underline" href={`mailto:${site.links.email}`}>{site.links.email}</a>.
+              </p>
+            )}
             {status === "sent" && (
               <p role="status" className="text-sm text-ok">✓ Thanks! Your message is on its way. I&apos;ll get back to you soon.</p>
             )}
