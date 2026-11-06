@@ -162,7 +162,7 @@ export default function Terminal() {
             onKeyDown={onKey}
             autoComplete="off"
             spellCheck={false}
-            className="ml-1 flex-1 bg-transparent text-fg-strong caret-ok outline-none focus-visible:outline-none"
+            className="ml-1 flex-1 bg-transparent text-fg-strong caret-ok no-ring outline-none focus-visible:outline-none"
             placeholder="type help…"
           />
         </form>

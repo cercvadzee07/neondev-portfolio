@@ -77,7 +77,12 @@ body { @apply text-fg font-sans antialiased; overflow-x: hidden; }
   * { scrollbar-width: thin; scrollbar-color: rgba(125, 207, 255, 0.45) transparent; }
 }
 
-:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
+/* Keyboard focus ring for links and buttons. Kept in the base layer so utilities like
+   outline-none on the terminal / command palette inputs can switch it off. */
+@layer base {
+  :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
+  .no-ring:focus, .no-ring:focus-visible { outline: none; box-shadow: none; }
+}
 
 @layer components {
   .section { @apply relative mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-24 md:py-32; }
