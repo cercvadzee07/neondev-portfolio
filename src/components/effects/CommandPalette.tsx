@@ -88,7 +88,7 @@ export default function CommandPalette() {
             onChange={(e) => { setQ(e.target.value); setActive(0); }}
             placeholder="Type a command or search…"
             aria-label="Search commands"
-            className="h-14 flex-1 bg-transparent text-fg-strong no-ring outline-none focus-visible:outline-none placeholder:text-fg-subtle"
+            className="h-14 min-w-0 flex-1 bg-transparent text-base text-fg-strong no-ring outline-none focus-visible:outline-none placeholder:text-fg-subtle"
           />
           <kbd className="rounded border border-cyan-neon/20 px-1.5 py-0.5 font-mono text-[10px] text-fg-muted">ESC</kbd>
         </div>

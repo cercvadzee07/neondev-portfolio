@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useId, useRef } from "react";
-import { useRichMotion } from "@/hooks/useMotion";
+import { useEffect, useId, useRef, useState } from "react";
+import { useReducedMotion, useRichMotion } from "@/hooks/useMotion";
 
 const LAYERS = 10;
 // precomputed edge colors (no per-layer CSS filters)
@@ -18,16 +18,25 @@ export default function Logo3D({ size = 260 }: { size?: number }) {
   // Firefox resolve the gradient inside the hidden copy and paint the letter transparent
   const gid = `nd-logo3d-g-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
+  const reduced = useReducedMotion();
+  // iOS only: motion access needs a one-time tap + permission prompt
+  const [needsTap, setNeedsTap] = useState(false);
+  const enableRef = useRef<(() => void) | null>(null);
+
   useEffect(() => {
     const el = ref.current;
     const box = wrap.current;
     if (!el || !box) return;
     const rest = { x: -18, y: 10 };
     el.style.transform = `rotateX(${rest.y}deg) rotateY(${rest.x}deg)`;
-    if (!rich) return;
+    if (reduced) return;
+
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    if (!rich && !coarse) return;
 
     let raf = 0, running = false, visible = true;
     let tx = rest.x, ty = rest.y, cx = rest.x, cy = rest.y;
+    const clamp = (v: number, m: number) => Math.max(-m, Math.min(m, v));
 
     const tick = () => {
       cx += (tx - cx) * 0.08;
@@ -36,24 +45,75 @@ export default function Logo3D({ size = 260 }: { size?: number }) {
       if (Math.abs(tx - cx) < 0.05 && Math.abs(ty - cy) < 0.05) { running = false; return; }
       raf = requestAnimationFrame(tick);
     };
+    const kick = () => { if (!running) { running = true; raf = requestAnimationFrame(tick); } };
+
+    // desktop: follow the pointer
     const onMove = (e: PointerEvent) => {
-      if (!visible) return;
+      if (!visible || e.pointerType === "touch") return;
       tx = (e.clientX / window.innerWidth - 0.5) * 50;
       ty = -(e.clientY / window.innerHeight - 0.5) * 34;
-      if (!running) { running = true; raf = requestAnimationFrame(tick); }
+      kick();
     };
+
+    // phone: follow the device tilt (gyroscope), relative to how the phone was held at first
+    let base: { b: number; g: number } | null = null;
+    const onTilt = (e: DeviceOrientationEvent) => {
+      if (!visible || e.beta == null || e.gamma == null) return;
+      if (!base) base = { b: e.beta, g: e.gamma };
+      tx = rest.x + clamp((e.gamma - base.g) * 1.1, 28);
+      ty = rest.y - clamp((e.beta - base.b) * 0.9, 22);
+      kick();
+    };
+    const startTilt = () => window.addEventListener("deviceorientation", onTilt);
+
+    const cleanups: Array<() => void> = [];
     const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; });
     io.observe(box);
-    window.addEventListener("pointermove", onMove, { passive: true });
+    if (rich) window.addEventListener("pointermove", onMove, { passive: true });
+
+    if (coarse && typeof window.DeviceOrientationEvent !== "undefined") {
+      // Listen right away: Android sends tilt events without asking.
+      startTilt();
+      const DOE = window.DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<"granted" | "denied"> };
+      if (typeof DOE.requestPermission === "function") {
+        // iOS Safari only sends events after a permission prompt, which must come from a tap.
+        // Show the hint until we either get a first event or the user grants access.
+        let gotEvent = false;
+        const firstEvent = (e: DeviceOrientationEvent) => { if (e.beta == null) return; gotEvent = true; setNeedsTap(false); window.removeEventListener("deviceorientation", firstEvent); };
+        window.addEventListener("deviceorientation", firstEvent);
+        const t = setTimeout(() => { if (!gotEvent) setNeedsTap(true); }, 600);
+        enableRef.current = () => {
+          DOE.requestPermission!()
+            .then((state) => { if (state === "granted") setNeedsTap(false); })
+            .catch(() => {});
+        };
+        cleanups.push(() => { clearTimeout(t); window.removeEventListener("deviceorientation", firstEvent); });
+      }
+    }
+
     return () => {
       cancelAnimationFrame(raf);
       io.disconnect();
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("deviceorientation", onTilt);
+      enableRef.current = null;
+      cleanups.forEach((f) => f());
     };
-  }, [rich]);
+  }, [rich, reduced]);
 
   return (
-    <div ref={wrap} className="relative" style={{ width: size, height: size, perspective: 1400 }} aria-hidden>
+    <div
+      ref={wrap}
+      className="relative"
+      style={{ width: size, height: size, perspective: 1400 }}
+      onClick={() => enableRef.current?.()}
+      aria-hidden
+    >
+      {needsTap && (
+        <span className="pointer-events-none absolute left-[115%] top-1/2 w-max -translate-y-1/2 font-mono text-[11px] tracking-[0.2em] text-fg-muted">
+          ← TAP TO TILT
+        </span>
+      )}
       {/* static soft glow + an opacity-only pulse layer */}
       <div className="absolute -inset-[30%] rounded-full bg-[radial-gradient(closest-side,rgba(150,170,255,.28),transparent)]" />
       <div className="absolute -inset-[12%] animate-breathe rounded-full bg-[radial-gradient(closest-side,rgba(125,207,255,.25),rgba(187,154,247,.12)_60%,transparent)]" />

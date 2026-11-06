@@ -105,6 +105,30 @@ export default function Terminal() {
   const idRef = useRef(2);
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * On phones, once the on-screen keyboard is open, scroll so the whole terminal window
+   * sits right above the keyboard (uses the visual viewport, which shrinks when the keyboard shows).
+   */
+  const fitAboveKeyboard = () => {
+    const vv = window.visualViewport;
+    if (!vv || !window.matchMedia("(pointer: coarse)").matches) return;
+    let done = false;
+    const align = () => {
+      if (done || !panelRef.current) return;
+      done = true;
+      vv.removeEventListener("resize", align);
+      const r = panelRef.current.getBoundingClientRect();
+      const top = vv.offsetTop + 8;
+      const bottom = vv.offsetTop + vv.height - 8;
+      // fits: put its bottom edge just above the keyboard; too tall: show it from the top
+      const delta = r.height <= bottom - top ? r.bottom - bottom : r.top - top;
+      if (Math.abs(delta) > 2) window.scrollBy({ top: delta, behavior: "smooth" });
+    };
+    vv.addEventListener("resize", align);
+    setTimeout(align, 450); // fallback if the keyboard was already open
+  };
 
   useEffect(() => {
     bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight });
@@ -140,7 +164,7 @@ export default function Terminal() {
   };
 
   return (
-    <div className="panel overflow-hidden shadow-glow" onClick={() => inputRef.current?.focus()}>
+    <div ref={panelRef} className="panel overflow-hidden shadow-glow" onClick={() => inputRef.current?.focus({ preventScroll: true })}>
       <div className="flex items-center gap-2 border-b border-cyan-neon/10 px-4 py-3">
         <span className="h-3 w-3 rounded-full bg-bad" />
         <span className="h-3 w-3 rounded-full bg-warn" />
@@ -157,12 +181,13 @@ export default function Terminal() {
           <input
             id="term-input"
             ref={inputRef}
+            onFocus={fitAboveKeyboard}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={onKey}
             autoComplete="off"
             spellCheck={false}
-            className="ml-1 flex-1 bg-transparent text-fg-strong caret-ok no-ring outline-none focus-visible:outline-none"
+            className="ml-1 min-w-0 flex-1 bg-transparent text-[16px] text-fg-strong caret-ok no-ring outline-none focus-visible:outline-none sm:text-sm"
             placeholder="type help…"
           />
         </form>

@@ -10,7 +10,7 @@ type Status = "idle" | "sending" | "sent" | "mailto" | "error";
 const FORMSPREE_ID = process.env.NEXT_PUBLIC_FORMSPREE_ID;
 
 const field =
-  "w-full rounded-xl border border-cyan-neon/15 bg-ink-850/80 px-4 py-3 text-fg-strong outline-none transition-colors placeholder:text-fg-subtle focus:border-cyan-neon/60 caret-ok";
+  "w-full rounded-xl border border-cyan-neon/15 bg-ink-850/80 px-4 py-3 text-base text-fg-strong outline-none transition-colors placeholder:text-fg-subtle focus:border-cyan-neon/60 caret-ok";
 
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
