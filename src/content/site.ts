@@ -13,7 +13,7 @@ export const site = {
     upwork: "https://www.upwork.com/freelancers/~01cae3191ce6fb81cc",
     github: "https://github.com/cercvadzee07",
     linkedin: "https://www.linkedin.com/in/beqa-tsertsvadze-a01b88383/",
-    email: "b.tsertsvadze.370@gmail.com",
+    email: "neondev.code@gmail.com",
   },
 } as const;
 

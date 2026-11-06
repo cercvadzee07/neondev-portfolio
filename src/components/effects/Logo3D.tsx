@@ -60,12 +60,22 @@ export default function Logo3D({ size = 260 }: { size?: number }) {
         ))}
         <div className="neon-border absolute inset-0 rounded-[24%]" style={{ borderWidth: size * 0.03 }} />
         <div className="absolute inset-0 rounded-[24%] bg-[linear-gradient(160deg,rgba(255,255,255,.16),transparent_40%)]" />
-        <div
-          className="text-neon absolute inset-0 flex items-center justify-center font-black leading-none"
-          style={{ fontSize: size * 0.64, letterSpacing: -size * 0.02, paddingBottom: size * 0.03, transform: "translateZ(8px)" }}
+        {/* SVG letter instead of background-clip:text — Firefox can drop gradient text inside 3D transforms until a repaint */}
+        <svg
+          viewBox="0 0 64 64"
+          className="absolute inset-0 h-full w-full"
+          style={{ transform: "translateZ(8px)" }}
+          aria-hidden
         >
-          N
-        </div>
+          <defs>
+            <linearGradient id="nd-logo3d-g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#7dcfff" />
+              <stop offset="50%" stopColor="#a9b1ff" />
+              <stop offset="100%" stopColor="#bb9af7" />
+            </linearGradient>
+          </defs>
+          <path d="M20 46V18h5.2l13.4 19.2V18H44v28h-5.2L25.4 26.8V46z" fill="url(#nd-logo3d-g)" />
+        </svg>
         <span
           className="absolute rounded-full bg-ok animate-blink"
           style={{ right: "13%", top: "13%", width: "7%", height: "7%", boxShadow: "0 0 18px #9ece6a", transform: "translateZ(10px)" }}

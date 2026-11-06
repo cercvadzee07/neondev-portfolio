@@ -32,7 +32,7 @@ export default function Pricing() {
                 </div>
                 <p className="mt-1 text-sm text-fg-muted">{p.blurb}</p>
                 <div className="mt-6 flex items-baseline gap-1">
-                  <span className={`text-5xl font-black ${p.popular ? "text-neon" : "text-fg-strong"}`}>${p.price}</span>
+                  <span className={`text-5xl font-black ${p.popular ? "text-cyan-neon" : "text-fg-strong"}`}>${p.price}</span>
                   <span className="text-sm text-fg-subtle">fixed</span>
                 </div>
                 <p className="mt-2 font-mono text-xs text-fg-subtle">
