@@ -147,7 +147,7 @@ export default function Terminal() {
         <span className="h-3 w-3 rounded-full bg-ok" />
         <span className="flex-1 pr-12 text-center font-mono text-xs text-cyan-neon">guest@neondev:~</span>
       </div>
-      <div ref={bodyRef} className="h-[360px] overflow-y-auto px-5 py-4 font-mono text-[13px] leading-6 text-fg sm:text-sm">
+      <div ref={bodyRef} className="h-[300px] overflow-y-auto px-4 py-4 sm:h-[360px] sm:px-5 font-mono text-[13px] leading-6 text-fg sm:text-sm">
         {lines.map((l) => (
           <div key={l.id}>{l.node}</div>
         ))}

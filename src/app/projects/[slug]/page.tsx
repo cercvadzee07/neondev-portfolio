@@ -39,14 +39,14 @@ export default async function ProjectPage({ params }: Params) {
   ];
 
   return (
-    <article className="mx-auto max-w-5xl px-4 pb-24 pt-32 sm:px-6">
+    <article className="mx-auto max-w-5xl px-4 pb-20 pt-24 sm:px-6 sm:pb-24 sm:pt-32">
       <Link href="/#work" className="font-mono text-xs uppercase tracking-[0.3em] text-fg-muted hover:text-cyan-neon">
         ← All projects
       </Link>
 
       <header className="mt-8">
         <p className="eyebrow">{p.subtitle}</p>
-        <DecryptText as="h1" text={p.title} className="mt-3 block text-5xl font-black tracking-tight text-fg-strong sm:text-7xl" />
+        <DecryptText as="h1" text={p.title} className="mt-3 block text-[clamp(2.5rem,11vw,4.5rem)] font-black tracking-tight text-fg-strong" />
         <p className="mt-5 max-w-2xl text-lg text-fg-muted">{p.summary}</p>
         <div className="mt-6 flex flex-wrap gap-2">
           {p.tags.map((t) => (

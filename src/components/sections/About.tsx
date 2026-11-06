@@ -30,7 +30,7 @@ export default function About() {
               Have a project in mind? Tell me about it and I&apos;ll reply with a clear plan, timeline and price.
             </p>
           </div>
-          <dl className="mt-8 grid grid-cols-2 gap-4">
+          <dl className="mt-8 grid grid-cols-1 gap-3 min-[380px]:grid-cols-2 sm:gap-4">
             {facts.map((f) => (
               <div key={f.k} className="card3d spotlight p-4">
                 <dt className="font-mono text-[11px] uppercase tracking-[0.25em] text-fg-subtle">{f.k}</dt>

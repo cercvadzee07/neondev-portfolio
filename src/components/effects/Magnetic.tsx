@@ -21,7 +21,7 @@ export default function Magnetic({ children, strength = 0.35 }: { children: Reac
       ref={ref}
       onPointerMove={onMove}
       onPointerLeave={reset}
-      className="inline-block"
+      className="block min-[420px]:inline-block"
       style={{ transition: "transform .3s cubic-bezier(.2,.8,.2,1)" }}
     >
       {children}

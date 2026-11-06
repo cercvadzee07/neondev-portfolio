@@ -15,7 +15,7 @@ export default function Reveal({ children, delay = 0, className = "" }: { childr
     return () => io.disconnect();
   }, []);
   return (
-    <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+    <div ref={ref} className={`reveal min-w-0 ${className}`} style={{ transitionDelay: `${delay}ms` }}>
       {children}
     </div>
   );

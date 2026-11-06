@@ -67,9 +67,9 @@ body { @apply text-fg font-sans antialiased; overflow-x: hidden; }
 :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
 
 @layer components {
-  .section { @apply relative mx-auto w-full max-w-6xl px-4 py-24 sm:px-6 md:py-32; }
-  .eyebrow { @apply font-mono text-xs uppercase tracking-[0.35em] text-fg-muted; }
-  .h2 { @apply mt-3 text-3xl font-extrabold tracking-tight text-fg-strong sm:text-5xl; }
+  .section { @apply relative mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-24 md:py-32; }
+  .eyebrow { @apply font-mono text-[11px] uppercase tracking-[0.25em] text-fg-muted sm:text-xs sm:tracking-[0.35em]; }
+  .h2 { @apply mt-3 text-[clamp(1.9rem,7vw,3rem)] font-extrabold leading-tight tracking-tight text-fg-strong; }
   .panel { @apply rounded-2xl border border-cyan-neon/15 bg-ink-850/90; }
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-xl bg-neon px-6 py-3 font-bold text-ink-950 shadow-glow transition-[filter,box-shadow] hover:brightness-110 hover:shadow-glow-lg;
