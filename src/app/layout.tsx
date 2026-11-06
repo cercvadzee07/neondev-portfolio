@@ -5,6 +5,7 @@ import "./globals.css";
 import Background from "@/components/effects/Background";
 import Cursor from "@/components/effects/Cursor";
 import CommandPalette from "@/components/effects/CommandPalette";
+import HashScroll from "@/components/effects/HashScroll";
 import { ScrollProgress } from "@/components/effects/Misc";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
@@ -51,10 +52,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Background />
         <ScrollProgress />
         <Navbar />
-        <main id="main">{children}</main>
+        <main id="main" tabIndex={-1} className="outline-none">{children}</main>
         <Footer />
         <CommandPalette />
         <Cursor />
+        <HashScroll />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>
     </html>
