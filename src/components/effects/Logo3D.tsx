@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { useRichMotion } from "@/hooks/useMotion";
 
 const LAYERS = 10;
@@ -14,6 +14,9 @@ export default function Logo3D({ size = 260 }: { size?: number }) {
   const wrap = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLDivElement>(null);
   const rich = useRichMotion();
+  // unique per instance: the hero renders a mobile and a desktop copy, and a duplicate id would make
+  // Firefox resolve the gradient inside the hidden copy and paint the letter transparent
+  const gid = `nd-logo3d-g-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
   useEffect(() => {
     const el = ref.current;
@@ -58,28 +61,29 @@ export default function Logo3D({ size = 260 }: { size?: number }) {
         {EDGE.map((bg, i) => (
           <div key={i} className="absolute inset-0 rounded-[24%]" style={{ transform: `translateZ(${-(i + 1) * 3}px)`, background: bg }} />
         ))}
-        <div className="neon-border absolute inset-0 rounded-[24%]" style={{ borderWidth: size * 0.03 }} />
-        <div className="absolute inset-0 rounded-[24%] bg-[linear-gradient(160deg,rgba(255,255,255,.16),transparent_40%)]" />
-        {/* SVG letter instead of background-clip:text — Firefox can drop gradient text inside 3D transforms until a repaint */}
-        <svg
-          viewBox="0 0 64 64"
-          className="absolute inset-0 h-full w-full"
-          style={{ transform: "translateZ(8px)" }}
-          aria-hidden
-        >
-          <defs>
-            <linearGradient id="nd-logo3d-g" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#7dcfff" />
-              <stop offset="50%" stopColor="#a9b1ff" />
-              <stop offset="100%" stopColor="#bb9af7" />
-            </linearGradient>
-          </defs>
-          <path d="M20 46V18h5.2l13.4 19.2V18H44v28h-5.2L25.4 26.8V46z" fill="url(#nd-logo3d-g)" />
-        </svg>
-        <span
-          className="absolute rounded-full bg-ok animate-blink"
-          style={{ right: "13%", top: "13%", width: "7%", height: "7%", boxShadow: "0 0 18px #9ece6a", transform: "translateZ(10px)" }}
-        />
+        {/*
+          Front face as ONE flat layer: border, gloss, letter and dot are ordinary 2D children.
+          Firefox can mis-sort sibling layers inside preserve-3d and hide the letter behind the face,
+          so only the extrusion layers above use translateZ.
+        */}
+        <div className="absolute inset-0" style={{ transform: "translateZ(1px)" }}>
+          <div className="neon-border absolute inset-0 rounded-[24%]" style={{ borderWidth: size * 0.03 }} />
+          <div className="absolute inset-0 rounded-[24%] bg-[linear-gradient(160deg,rgba(255,255,255,.16),transparent_40%)]" />
+          <svg viewBox="0 0 64 64" className="absolute inset-0 h-full w-full" aria-hidden>
+            <defs>
+              <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#7dcfff" />
+                <stop offset="50%" stopColor="#a9b1ff" />
+                <stop offset="100%" stopColor="#bb9af7" />
+              </linearGradient>
+            </defs>
+            <path d="M20 46V18h5.2l13.4 19.2V18H44v28h-5.2L25.4 26.8V46z" fill={`url(#${gid})`} />
+          </svg>
+          <span
+            className="absolute rounded-full bg-ok animate-blink"
+            style={{ right: "13%", top: "13%", width: "7%", height: "7%", boxShadow: "0 0 18px #9ece6a" }}
+          />
+        </div>
       </div>
     </div>
   );
