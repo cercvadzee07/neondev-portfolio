@@ -16,6 +16,31 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "neondev-pulse",
+    title: "NEONDEV Pulse",
+    subtitle: "Uptime Monitoring SaaS",
+    summary:
+      "A SaaS that checks websites every few minutes, emails you the moment one goes down, and publishes a live public status page.",
+    image: "/projects/neondev-pulse.jpg",
+    accent: "violet",
+    tags: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "Tailwind CSS", "Vercel"],
+    live: "https://neondev-pulse-ofuh.vercel.app/",
+    source: "https://github.com/cercvadzee07/neondev-pulse",
+    challenge:
+      "Build a complete SaaS MVP end to end: accounts, background jobs, alerting and public pages. It had to be reliable enough to trust with real outages and secure enough that one customer can never see another's data.",
+    solution:
+      "A Next.js App Router app on Supabase (Postgres + Auth). A scheduled check engine pings every site, retries before declaring an outage, and opens or resolves incidents automatically. Row-Level Security isolates every user's data, and column-level grants keep monitored URLs private even on public status pages. Alerts go out through the Resend API.",
+    features: [
+      "Uptime checks every 5 minutes with retry",
+      "Email alerts on downtime and recovery",
+      "Response-time charts and incident timeline",
+      "Public status pages with 90-day history",
+      "Row-Level Security and private URLs",
+    ],
+    result:
+      "A working, deployed SaaS that shows the full product path: database design, auth, background jobs, third-party APIs, security and a polished dashboard UI. Built from my day-to-day experience as a NOC analyst.",
+  },
+  {
     slug: "lvlup",
     title: "LVLUP",
     subtitle: "Full-Stack Gaming Store",
