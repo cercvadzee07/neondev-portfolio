@@ -10,7 +10,7 @@ export default function Hero() {
       <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.4fr_1fr]">
         <div className="min-w-0">
           <div className="mb-8 sm:hidden">
-            <Logo3D size={96} />
+            <Logo3D size={96} facing="right" />
           </div>
           <p className="eyebrow flex items-center gap-2">
             <span className="h-2 w-2 animate-blink rounded-full bg-ok shadow-[0_0_10px_#9ece6a]" />

@@ -3,6 +3,12 @@ import Reveal from "@/components/effects/Reveal";
 import DecryptText from "@/components/effects/DecryptText";
 import { services } from "@/content/offer";
 
+const LINE_MASK = `url("data:image/svg+xml,${encodeURIComponent(
+  "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50' preserveAspectRatio='none'>" +
+    "<polyline points='2,40 20,32 40,36 60,20 80,26 100,12 120,18 140,8 160,16 180,6 198,10' " +
+    "fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>",
+)}")`;
+
 /** Tiny animated visuals for each bento card. */
 function Visual({ i }: { i: number }) {
   if (i === 0)
@@ -22,24 +28,22 @@ function Visual({ i }: { i: number }) {
       </div>
     );
   if (i === 2)
+    // The line is a gradient <div> cut to shape with a CSS mask, revealed with clip-path.
+    // (An inline SVG with an animated gradient stroke vanishes in Firefox/Chrome while the card is 3D-tilted.)
     return (
-      <svg viewBox="0 0 200 50" className="mt-6 h-12 w-full" aria-hidden>
-        <polyline
-          points="0,40 20,32 40,36 60,20 80,26 100,12 120,18 140,8 160,16 180,6 200,10"
-          fill="none"
-          stroke="url(#sv)"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          className="[stroke-dasharray:400] motion-safe:animate-[dash_3s_ease-in-out_infinite]"
-        />
-        <defs>
-          {/* userSpaceOnUse: an objectBoundingBox gradient vanishes in Chrome while the card is 3D-tilted */}
-          <linearGradient id="sv" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="0">
-            <stop offset="0" stopColor="#7dcfff" />
-            <stop offset="1" stopColor="#bb9af7" />
-          </linearGradient>
-        </defs>
-      </svg>
+      <div
+        aria-hidden
+        className="mx-auto mt-6 aspect-[4/1] h-12 motion-safe:animate-[reveal_3s_ease-in-out_infinite]"
+        style={{
+          background: "linear-gradient(90deg, #7dcfff, #bb9af7)",
+          WebkitMaskImage: LINE_MASK,
+          maskImage: LINE_MASK,
+          WebkitMaskSize: "100% 100%",
+          maskSize: "100% 100%",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+        }}
+      />
     );
   return (
     <div className="mt-6 flex items-center gap-3">
@@ -78,7 +82,7 @@ export default function Services() {
         ))}
       </div>
       <style>{`
-        @keyframes dash { 0% { stroke-dashoffset: 400; } 60%, 100% { stroke-dashoffset: 0; } }
+        @keyframes reveal { 0% { clip-path: inset(0 100% 0 0); } 60%, 100% { clip-path: inset(0 0 0 0); } }
         @keyframes bob { 50% { transform: translateY(-8px); opacity: .5; } }
       `}</style>
     </section>

@@ -10,7 +10,8 @@ const EDGE = Array.from({ length: LAYERS }, (_, i) => {
 });
 
 /** Extruded 3D NEONDEV badge that follows the pointer. The animation loop only runs while it is moving and on screen. */
-export default function Logo3D({ size = 260 }: { size?: number }) {
+/** `facing` sets the resting angle: "left" (default) or "right" — e.g. when the logo sits on the left edge. */
+export default function Logo3D({ size = 260, facing = "left" }: { size?: number; facing?: "left" | "right" }) {
   const wrap = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLDivElement>(null);
   const rich = useRichMotion();
@@ -27,7 +28,7 @@ export default function Logo3D({ size = 260 }: { size?: number }) {
     const el = ref.current;
     const box = wrap.current;
     if (!el || !box) return;
-    const rest = { x: -18, y: 10 };
+    const rest = { x: facing === "right" ? 18 : -18, y: 10 };
     el.style.transform = `rotateX(${rest.y}deg) rotateY(${rest.x}deg)`;
     if (reduced) return;
 
@@ -50,7 +51,9 @@ export default function Logo3D({ size = 260 }: { size?: number }) {
     // desktop: follow the pointer
     const onMove = (e: PointerEvent) => {
       if (!visible || e.pointerType === "touch") return;
-      tx = (e.clientX / window.innerWidth - 0.5) * 50;
+      const px = e.clientX / window.innerWidth - 0.5;
+      // facing right: stay turned right (+3°…+33°) and only lean with the pointer
+      tx = facing === "right" ? rest.x + px * 30 : px * 50;
       ty = -(e.clientY / window.innerHeight - 0.5) * 34;
       kick();
     };
@@ -99,7 +102,7 @@ export default function Logo3D({ size = 260 }: { size?: number }) {
       enableRef.current = null;
       cleanups.forEach((f) => f());
     };
-  }, [rich, reduced]);
+  }, [rich, reduced, facing]);
 
   return (
     <div
