@@ -76,9 +76,9 @@ export default function Services() {
       <div className="mt-14 grid gap-5 md:grid-cols-3">
         {services.map((s, i) => (
           <Reveal key={s.title} delay={i * 100} className={s.size === "lg" ? "md:col-span-2" : ""}>
-            {/* The dashboards card stays flat: its animated SVG line flickers inside a 3D-tilted card. */}
+            {/* The dashboards card only zooms (no 3D tilt): its animated SVG line flickers inside a 3D-tilted card. */}
             {i === 2 ? (
-              <div className="card3d h-full">
+              <div className="card3d h-full transition-transform duration-[250ms] ease-[cubic-bezier(.2,.8,.2,1)] motion-safe:hover:scale-[1.02]">
                 <CardBody s={s} i={i} />
               </div>
             ) : (
