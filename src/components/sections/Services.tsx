@@ -33,7 +33,8 @@ function Visual({ i }: { i: number }) {
           className="[stroke-dasharray:400] motion-safe:animate-[dash_3s_ease-in-out_infinite]"
         />
         <defs>
-          <linearGradient id="sv" x1="0" x2="1">
+          {/* userSpaceOnUse: an objectBoundingBox gradient vanishes in Chrome while the card is 3D-tilted */}
+          <linearGradient id="sv" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="0">
             <stop offset="0" stopColor="#7dcfff" />
             <stop offset="1" stopColor="#bb9af7" />
           </linearGradient>
