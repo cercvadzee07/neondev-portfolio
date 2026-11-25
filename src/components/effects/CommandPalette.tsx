@@ -2,13 +2,17 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent as RKeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useUI } from "@/store/ui";
-import { nav, site } from "@/content/site";
+import { site } from "@/content/site";
+import { getDict, type Lang } from "@/content/i18n";
 import { projects } from "@/content/projects";
 
 type Cmd = { id: string; label: string; hint: string; run: () => void };
 
 /** Ctrl/⌘+K command palette for keyboard navigation. */
-export default function CommandPalette() {
+export default function CommandPalette({ lang }: { lang: Lang }) {
+  const t = getDict(lang);
+  const p = t.palette;
+  const home = `/${lang}`;
   const { paletteOpen, closePalette, togglePalette } = useUI();
   const router = useRouter();
   const [q, setQ] = useState("");
@@ -17,26 +21,28 @@ export default function CommandPalette() {
 
   const go = (hash: string) => {
     closePalette();
-    if (window.location.pathname !== "/") router.push("/" + hash);
+    if (window.location.pathname !== home) router.push(home + hash);
     else document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
   };
 
   const cmds: Cmd[] = useMemo(
     () => [
-      ...nav.map((n) => ({ id: n.href, label: `Go to ${n.label}`, hint: "section", run: () => go(n.href) })),
-      ...projects.map((p) => ({
-        id: p.slug,
-        label: `Open ${p.title} case study`,
-        hint: "project",
-        run: () => { closePalette(); router.push(`/projects/${p.slug}`); },
+      ...t.nav.map((n) => ({ id: n.href, label: p.goTo(n.label), hint: p.hints.section, run: () => go(n.href) })),
+      ...projects.map((pr) => ({
+        id: pr.slug,
+        label: p.openProject(pr.title),
+        hint: p.hints.project,
+        run: () => { closePalette(); router.push(`/en/projects/${pr.slug}`); },
       })),
-      { id: "upwork", label: "Hire me on Upwork", hint: "link", run: () => window.open(site.links.upwork, "_blank", "noopener") },
-      { id: "github", label: "Open GitHub", hint: "link", run: () => window.open(site.links.github, "_blank", "noopener") },
-      { id: "email", label: "Copy email address", hint: "action", run: () => { navigator.clipboard?.writeText(site.links.email); closePalette(); } },
-      { id: "top", label: "Back to top", hint: "action", run: () => { closePalette(); window.scrollTo({ top: 0, behavior: "smooth" }); } },
+      ...(p.upwork
+        ? [{ id: "upwork", label: p.upwork, hint: p.hints.link, run: () => window.open(site.links.upwork, "_blank", "noopener") }]
+        : []),
+      { id: "github", label: p.github, hint: p.hints.link, run: () => window.open(site.links.github, "_blank", "noopener") },
+      { id: "email", label: p.copyEmail, hint: p.hints.action, run: () => { navigator.clipboard?.writeText(site.links.email); closePalette(); } },
+      { id: "top", label: p.top, hint: p.hints.action, run: () => { closePalette(); window.scrollTo({ top: 0, behavior: "smooth" }); } },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [lang]
   );
 
   const list = cmds.filter((c) => c.label.toLowerCase().includes(q.toLowerCase()));
@@ -86,14 +92,14 @@ export default function CommandPalette() {
             ref={inputRef}
             value={q}
             onChange={(e) => { setQ(e.target.value); setActive(0); }}
-            placeholder="Type a command or search…"
+            placeholder={p.placeholder}
             aria-label="Search commands"
             className="h-14 min-w-0 flex-1 bg-transparent text-base text-fg-strong no-ring outline-none focus-visible:outline-none placeholder:text-fg-subtle"
           />
           <kbd className="rounded border border-cyan-neon/20 px-1.5 py-0.5 font-mono text-[10px] text-fg-muted">ESC</kbd>
         </div>
         <ul className="max-h-80 overflow-y-auto p-2" role="listbox">
-          {list.length === 0 && <li className="px-3 py-6 text-center text-sm text-fg-muted">No results</li>}
+          {list.length === 0 && <li className="px-3 py-6 text-center text-sm text-fg-muted">{p.empty}</li>}
           {list.map((c, i) => (
             <li
               key={c.id}

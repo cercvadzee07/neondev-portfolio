@@ -3,8 +3,10 @@ import Magnetic from "@/components/effects/Magnetic";
 import DecryptText from "@/components/effects/DecryptText";
 import { LiveClock, Marquee } from "@/components/effects/Misc";
 import { site } from "@/content/site";
+import { getDict, type Lang } from "@/content/i18n";
 
-export default function Hero() {
+export default function Hero({ lang }: { lang: Lang }) {
+  const t = getDict(lang).hero;
   return (
     <section className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden pt-20 sm:pt-24">
       <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.4fr_1fr]">
@@ -14,26 +16,33 @@ export default function Hero() {
           </div>
           <p className="eyebrow flex items-center gap-2">
             <span className="h-2 w-2 animate-blink rounded-full bg-ok shadow-[0_0_10px_#9ece6a]" />
-            Available for new projects
+            {t.eyebrow}
           </p>
-          <h1 className="mt-5 text-[clamp(2.1rem,9.5vw,4.25rem)] font-black leading-[1.04] tracking-tight text-fg-strong sm:mt-6">
-            Building <span className="sm:whitespace-nowrap">Production-Ready</span>{" "}
-            <DecryptText text="Web Apps & MVPs" className="text-neon" />
+          {/* Georgian words are longer and wider, so the KA title uses a slightly smaller scale */}
+          <h1
+            className={`mt-5 font-black tracking-tight text-fg-strong sm:mt-6 ${
+              lang === "ka" ? "text-[clamp(1.85rem,7.4vw,3.6rem)] leading-[1.12]" : "text-[clamp(2.1rem,9.5vw,4.25rem)] leading-[1.04]"
+            }`}
+          >
+            {t.lead} {t.nowrap && <><span className="sm:whitespace-nowrap">{t.nowrap}</span>{" "}</>}
+            <DecryptText text={t.decrypt} className="text-neon" />
           </h1>
-          <p className="mt-5 max-w-xl text-base text-fg-muted sm:mt-6 sm:text-lg">{site.description}</p>
+          <p className="mt-5 max-w-xl text-base text-fg-muted sm:mt-6 sm:text-lg">{t.subtitle}</p>
           <div className="mt-8 grid grid-cols-1 gap-3 min-[420px]:flex min-[420px]:flex-wrap min-[420px]:items-center sm:mt-9 sm:gap-4">
             <Magnetic>
-              <a href="#contact" className="btn-primary w-full min-[420px]:w-auto">Start a project →</a>
+              <a href="#contact" className="btn-primary w-full min-[420px]:w-auto">{t.primary}</a>
             </Magnetic>
             <Magnetic>
-              <a href="#work" className="btn-ghost w-full min-[420px]:w-auto">View my work</a>
+              <a href="#work" className="btn-ghost w-full min-[420px]:w-auto">{t.secondary}</a>
             </Magnetic>
           </div>
-          <div className="mt-7 flex flex-wrap gap-2 sm:mt-8">
-            {site.stack.slice(0, 5).map((s) => (
-              <span key={s} className="chip">{s}</span>
-            ))}
-          </div>
+          {t.showStack && (
+            <div className="mt-7 flex flex-wrap gap-2 sm:mt-8">
+              {site.stack.slice(0, 5).map((s) => (
+                <span key={s} className="chip">{s}</span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="relative mx-auto hidden aspect-square w-full max-w-[420px] items-center justify-center sm:flex">

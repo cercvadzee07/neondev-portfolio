@@ -3,7 +3,16 @@ import { useRef, type ReactNode, type PointerEvent as RPointerEvent } from "reac
 import { useRichMotion } from "@/hooks/useMotion";
 
 /** Wraps an element so it is gently pulled toward the pointer. */
-export default function Magnetic({ children, strength = 0.35 }: { children: ReactNode; strength?: number }) {
+export default function Magnetic({
+  children,
+  strength = 0.35,
+  className = "block min-[420px]:inline-block",
+}: {
+  children: ReactNode;
+  strength?: number;
+  /** display of the wrapper; pass "block" for full-width buttons */
+  className?: string;
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const rich = useRichMotion();
 
@@ -21,7 +30,7 @@ export default function Magnetic({ children, strength = 0.35 }: { children: Reac
       ref={ref}
       onPointerMove={onMove}
       onPointerLeave={reset}
-      className="block min-[420px]:inline-block"
+      className={className}
       style={{ transition: "transform .3s cubic-bezier(.2,.8,.2,1)" }}
     >
       {children}

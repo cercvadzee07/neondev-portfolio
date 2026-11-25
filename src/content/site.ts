@@ -15,6 +15,14 @@ export const site = {
     linkedin: "https://www.linkedin.com/in/beqa-tsertsvadze-a01b88383/",
     email: "neondev.code@gmail.com",
   },
+  /** Contact channels shown in the Contact section. */
+  local: {
+    phone: "+995 579 74 74 97",
+    phoneHref: "tel:+995579747497",
+    whatsapp: "https://wa.me/995579747497",
+    viber: "viber://chat?number=%2B995579747497",
+    instagram: "https://www.instagram.com/neondev.code",
+  },
 } as const;
 
 export const nav = [

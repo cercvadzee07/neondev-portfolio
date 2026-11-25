@@ -77,3 +77,12 @@ src/
 ---
 
 © NEONDEV · BUILD · SHIP · REPEAT
+
+## Languages (EN / KA)
+
+- `/ka` (main) and `/en` — the same site for small businesses in two languages. Georgian is the main language: `/` opens `/ka`, unless the visitor chose EN before (remembered in a `lang` cookie). See `src/middleware.ts`.
+- All copy lives in `src/content/en.ts` and `src/content/ka.ts` (shape in `src/content/types.ts`).
+- Georgian text uses **Noto Sans Georgian** (only loaded on `/ka`).
+- Contact channels (WhatsApp, Viber, Instagram, phone) live in `src/content/site.ts → local`.
+- **Reviews:** add items to `testimonials.items` in `src/content/ka.ts`; the section appears automatically.
+- Case studies are English-only (`/en/projects/<slug>`); `/ka/projects/*` redirects there.

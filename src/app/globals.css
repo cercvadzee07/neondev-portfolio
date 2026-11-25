@@ -55,6 +55,17 @@
 }
 
 html { scroll-behavior: smooth; background: var(--bg); }
+/* ---- Georgian (/ka) ----
+   Inter and JetBrains Mono have no Georgian letters: Latin stays Inter / JetBrains Mono, Georgian falls back to Noto Sans Georgian. */
+html[lang="ka"] {
+  --font-sans: var(--font-inter-var), var(--font-geo-var), system-ui, sans-serif;
+  --font-mono: var(--font-jb-var), var(--font-geo-var), ui-monospace, monospace;
+}
+/* uppercase would turn Georgian letters into Mtavruli capitals, which reads oddly — keep them as written */
+html[lang="ka"] .eyebrow, html[lang="ka"] .uppercase { text-transform: none; }
+/* Georgian glyphs are wider: soften the wide tracking on labels */
+html[lang="ka"] .eyebrow { letter-spacing: 0.12em; }
+
 /* body stays transparent so the fixed <Background /> (z-index -10) shows through */
 body { @apply text-fg font-sans antialiased; overflow-x: hidden; }
 ::selection { background: rgba(125, 207, 255, 0.35); color: #fff; }

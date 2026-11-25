@@ -1,23 +1,6 @@
-import Hero from "@/components/sections/Hero";
-import Work from "@/components/sections/Work";
-import Services from "@/components/sections/Services";
-import Pricing from "@/components/sections/Pricing";
-import Process from "@/components/sections/Process";
-import About from "@/components/sections/About";
-import FAQ from "@/components/sections/FAQ";
-import Contact from "@/components/sections/Contact";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-  return (
-    <>
-      <Hero />
-      <Work />
-      <Services />
-      <Pricing />
-      <Process />
-      <About />
-      <FAQ />
-      <Contact />
-    </>
-  );
+// "/" is normally handled by src/middleware.ts (Georgian by default, or the visitor's last choice). This is a fallback.
+export default function RootPage() {
+  redirect("/ka");
 }

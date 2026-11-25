@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent, type ReactNode, type KeyboardEvent as RKeyboardEvent } from "react";
 import { projects } from "@/content/projects";
-import { services } from "@/content/offer";
+import { en } from "@/content/en";
 import { site } from "@/content/site";
 import LogoMark from "@/components/ui/LogoMark";
 
@@ -22,7 +22,8 @@ const neofetch = (
     <div className="leading-6">
       <div><span className="text-violet-neon">guest</span>@<span className="text-cyan-neon">neondev</span></div>
       <div className="text-fg-subtle">──────────────────────────</div>
-      <div>{k("role     ")}{site.role}</div>
+      <div>{k("role     ")}Websites for businesses</div>
+      <div>{k("clients  ")}cafés · salons · clinics · tourism</div>
       <div>{k("stack    ")}Next.js · React · TypeScript</div>
       <div>{k("styling  ")}Tailwind CSS · Zustand</div>
       <div>{k("backend  ")}Node.js · Express · PostgreSQL</div>
@@ -45,6 +46,7 @@ function run(cmd: string): ReactNode | "clear" {
             ["projects", "featured work"],
             ["skills", "tech stack"],
             ["services", "what I can build for you"],
+            ["pricing", "packages & prices"],
             ["contact", "how to reach me"],
             ["neofetch", "system info"],
             ["clear", "clear the screen"],
@@ -57,7 +59,7 @@ function run(cmd: string): ReactNode | "clear" {
         </div>
       );
     case "about":
-      return `${site.person} — ${site.role} from ${site.location}. I build fast, production-ready web apps and MVPs.`;
+      return `${site.person} — web developer from ${site.location}. I build fast, mobile-friendly websites for small businesses: cafés, salons, clinics and tour agencies.`;
     case "projects":
       return (
         <div>
@@ -73,13 +75,19 @@ function run(cmd: string): ReactNode | "clear" {
     case "skills":
       return site.stack.join(" · ");
     case "services":
-      return services.map((s) => `• ${s.title}`).join("\n");
+      return en.services.items.map((s) => `• ${s.title}`).join("\n");
+    case "pricing":
+      return (
+        en.pricing.packages.map((p) => `• ${p.name.padEnd(9)} ₾${p.price.toLocaleString("en-US")}  (${p.days} days)`).join("\n") +
+        `\n+ ${en.pricing.addon.title}: ${en.pricing.addon.price}`
+      );
     case "contact":
       return (
         <div>
+          <div>{k("whatsapp")}{site.local.phone}</div>
+          <div>{k("phone   ")}{site.local.phone}</div>
+          <div>{k("insta   ")}@neondev.code</div>
           <div>{k("email   ")}{site.links.email}</div>
-          <div>{k("upwork  ")}Beqa T.</div>
-          <div>{k("github  ")}cercvadzee07</div>
         </div>
       );
     case "neofetch":

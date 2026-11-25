@@ -1,16 +1,17 @@
 import Reveal from "@/components/effects/Reveal";
 import DecryptText from "@/components/effects/DecryptText";
-import { faq } from "@/content/offer";
+import { getDict, type Lang } from "@/content/i18n";
 
-export default function FAQ() {
+export default function FAQ({ lang }: { lang: Lang }) {
+  const t = getDict(lang).faq;
   return (
     <section id="faq" className="section scroll-mt-16">
       <Reveal>
-        <p className="eyebrow">06 // FAQ</p>
-        <DecryptText as="h2" text="Good questions" className="h2" />
+        <p className="eyebrow">{t.eyebrow}</p>
+        <DecryptText as="h2" text={t.title} className="h2" />
       </Reveal>
       <div className="mt-12 space-y-3">
-        {faq.map((f, i) => (
+        {t.items.map((f, i) => (
           <Reveal key={f.q} delay={i * 60}>
             <details className="card3d group p-0 [&_summary::-webkit-details-marker]:hidden">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-left font-semibold text-fg-strong">

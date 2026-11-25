@@ -1,16 +1,17 @@
 import TiltCard from "@/components/effects/TiltCard";
 import Reveal from "@/components/effects/Reveal";
 import DecryptText from "@/components/effects/DecryptText";
-import { services } from "@/content/offer";
+import { getDict, type Lang } from "@/content/i18n";
+import type { ServiceItem } from "@/content/types";
 
 /** Tiny animated visuals for each bento card. */
-function Visual({ i }: { i: number }) {
+function Visual({ i, lines }: { i: number; lines: readonly [string, string, string] }) {
   if (i === 0)
     return (
       <div className="mt-6 space-y-2 font-mono text-xs text-fg-subtle">
-        <div><span className="text-ok">✓</span> auth · database · api</div>
-        <div><span className="text-ok">✓</span> responsive ui</div>
-        <div><span className="text-cyan-neon">→</span> deployed to production<span className="ml-1 inline-block h-3 w-1.5 animate-blink bg-ok align-middle" /></div>
+        <div><span className="text-ok">✓</span> {lines[0]}</div>
+        <div><span className="text-ok">✓</span> {lines[1]}</div>
+        <div><span className="text-cyan-neon">→</span> {lines[2]}<span className="ml-1 inline-block h-3 w-1.5 animate-blink bg-ok align-middle" /></div>
       </div>
     );
   if (i === 1)
@@ -53,37 +54,38 @@ function Visual({ i }: { i: number }) {
   );
 }
 
-function CardBody({ s, i }: { s: (typeof services)[number]; i: number }) {
+function CardBody({ s, i, lines }: { s: ServiceItem; i: number; lines: readonly [string, string, string] }) {
   return (
     <div className="flex h-full flex-col p-7">
-      <span className="font-mono text-[11px] text-cyan-neon/80">{"// " + s.tag}</span>
-      <h3 className="mt-3 text-xl font-bold text-fg-strong">{s.title}</h3>
+      {s.tag && <span className="font-mono text-[11px] text-cyan-neon/80">{"// " + s.tag}</span>}
+      <h3 className={`${s.tag ? "mt-3 " : ""}text-xl font-bold text-fg-strong`}>{s.title}</h3>
       <p className="mt-2 text-sm leading-relaxed text-fg-muted">{s.text}</p>
       <div className="mt-auto">
-        <Visual i={i} />
+        <Visual i={i} lines={lines} />
       </div>
     </div>
   );
 }
 
-export default function Services() {
+export default function Services({ lang }: { lang: Lang }) {
+  const t = getDict(lang).services;
   return (
     <section id="services" className="section scroll-mt-16">
       <Reveal>
-        <p className="eyebrow">02 // Services</p>
-        <DecryptText as="h2" text="What I can build for you" className="h2" />
+        <p className="eyebrow">{t.eyebrow}</p>
+        <DecryptText as="h2" text={t.title} className="h2" />
       </Reveal>
       <div className="mt-14 grid gap-5 md:grid-cols-3">
-        {services.map((s, i) => (
+        {t.items.map((s, i) => (
           <Reveal key={s.title} delay={i * 100} className={s.size === "lg" ? "md:col-span-2" : ""}>
             {/* The dashboards card only zooms (no 3D tilt): its animated SVG line flickers inside a 3D-tilted card. */}
             {i === 2 ? (
               <div className="card3d h-full transition-transform duration-[250ms] ease-[cubic-bezier(.2,.8,.2,1)] motion-safe:hover:scale-[1.02]">
-                <CardBody s={s} i={i} />
+                <CardBody s={s} i={i} lines={t.visual0} />
               </div>
             ) : (
               <TiltCard max={6} className="card3d h-full">
-                <CardBody s={s} i={i} />
+                <CardBody s={s} i={i} lines={t.visual0} />
               </TiltCard>
             )}
           </Reveal>
